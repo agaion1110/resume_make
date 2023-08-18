@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-  import { closeGlobalLoading } from '@/utils/common';
+  // import { closeGlobalLoading } from '@/utils/common';
   const emit = defineEmits(['freeMake', 'customTemplate', 'sponsor']);
   const freeMakeResume = () => {
     emit('freeMake');
@@ -34,7 +34,7 @@
   };
   // 页面销毁
   onUnmounted(() => {
-    closeGlobalLoading(); // 关闭全局等待层
+    // closeGlobalLoading(); // 关闭全局等待层
   });
 </script>
 

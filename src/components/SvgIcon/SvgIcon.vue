@@ -34,7 +34,7 @@
     }
   })
   const iconClassName = computed(() => {
-    return `#${props.iconName}`;
+    return `#icon-${props.iconName}`;
   })
   const svgclass = computed(() => {
     if (props.className) {

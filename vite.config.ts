@@ -51,7 +51,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       logOverride: { 'this-is-undefined-in-esm': 'silent' }
     },
     server: {
-      port: 8888, //启动端口
+      port: 8889, //启动端口
       host: '0.0.0.0',
       open: true,
       hmr: {
