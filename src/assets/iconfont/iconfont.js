@@ -28,7 +28,7 @@
           a = document.createElement('div');
         (a.innerHTML = h._iconfont_svg_string_3394880),
           (a = a.getElementsByTagName('svg')[0]) &&
-            (a.setAttribute('aria-hidden', 'true'),
+          (a.setAttribute('aria-hidden', 'true'),
             (a.style.position = 'absolute'),
             (a.style.width = 0),
             (a.style.height = 0),
@@ -40,11 +40,11 @@
           ? ~['complete', 'loaded', 'interactive'].indexOf(document.readyState)
             ? setTimeout(l, 0)
             : ((z = function () {
-                document.removeEventListener('DOMContentLoaded', z, !1), l();
-              }),
+              document.removeEventListener('DOMContentLoaded', z, !1), l();
+            }),
               document.addEventListener('DOMContentLoaded', z, !1))
           : document.attachEvent &&
-            ((t = l),
+          ((t = l),
             (o = h.document),
             (i = !1),
             s(),
