@@ -23,11 +23,12 @@ class Request {
   */
   requestUrlList?: string[];
 
+  // 构造函数
   constructor(config: RequestConfig) {
     this.requestUrlList = [];
     this.cancelRequestSourceList = []; // 取消请求列表
     this.instance = axios.create(config); //  创建axios实例
-    this.interceptorsObj = config.interceptors;
+    this.interceptorsObj = config.interceptors;// 获取请求拦截器和响应拦截器
     // 拦截器执行顺序：接口请求 -> 实例请求 -> 全局请求 -> 实例响应 -> 全局响应 -> 接口响应
     this.instance.interceptors.request.use(
       (res: AxiosRequestConfig) => {
@@ -37,13 +38,15 @@ class Request {
       (err: any) => err
     );
     // 使用实例拦截器
+    // 请求拦截器
     this.instance.interceptors.request.use(
-      this.interceptorsObj?.requestInterceptors,
-      this.interceptorsObj?.requestInterceptorsCatch
+      this.interceptorsObj?.requestInterceptors,// 在发送请求之前做些什么
+      this.interceptorsObj?.requestInterceptorsCatch // 对错误的请求做些什么
     );
+    // 相应拦截器
     this.instance.interceptors.response.use(
-      this.interceptorsObj?.responseInterceptors,
-      this.interceptorsObj?.responseInterceptorsCatch
+      this.interceptorsObj?.responseInterceptors,// 2xx 范围内的状态码都会触发该函数。对响应数据做点什么
+      this.interceptorsObj?.responseInterceptorsCatch// 超出 2xx 范围的状态码都会触发该函数。对响应错误做点什么
     );
     // 全局响应拦截器保证最后执行
     this.instance.interceptors.response.use(

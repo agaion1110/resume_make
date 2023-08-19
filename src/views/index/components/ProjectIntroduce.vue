@@ -6,9 +6,9 @@
 
       <!-- 查看更多按钮 -->
       <div class="see-more-box">
-        <div class="button" @click="freeMakeResume"> 免费制作 </div>
-        <div class="button" @click="toCustom"> 贡献模板 </div>
-        <div class="button" @click="toSponsor"> 成为赞助者 </div>
+        <div class="button" @click=""> 免费制作 </div>
+        <div class="button" @click=""> 贡献模板 </div>
+        <div class="button" @click=""> 成为赞助者 </div>
       </div>
     </div>
     <div class="right">
@@ -18,24 +18,6 @@
 </template>
 
 <script setup lang="ts">
-  // import { closeGlobalLoading } from '@/utils/common';
-  const emit = defineEmits(['freeMake', 'customTemplate', 'sponsor']);
-  const freeMakeResume = () => {
-    emit('freeMake');
-  };
-
-  // 滚动到自定义模板
-  const toCustom = () => {
-    emit('customTemplate');
-  };
-  // 成为赞助者
-  const toSponsor = () => {
-    emit('sponsor');
-  };
-  // 页面销毁
-  onUnmounted(() => {
-    // closeGlobalLoading(); // 关闭全局等待层
-  });
 </script>
 
 <style lang="scss" scoped>

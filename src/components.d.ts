@@ -24,8 +24,11 @@ declare module '@vue/runtime-core' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     LogoCom: typeof import('./components/LogoCom/LogoCom.vue')['default']
     NavBar: typeof import('./components/NavBar/NavBar.vue')['default']
+    PreviewImage: typeof import('./components/PreviewImage/PreviewImage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SkeletonCard: typeof import('./components/SkeletonCard/SkeletonCard.vue')['default']
     SvgIcon: typeof import('./components/SvgIcon/SvgIcon.vue')['default']
+    TemplateCard: typeof import('./components/TemplateCard/TemplateCard.vue')['default']
   }
 }

@@ -1,5 +1,9 @@
+import { useUserInfoStore } from "./userInfo";
+
 export interface IAppStore {
     useUserInfoStore: ReturnType<typeof useUserInfoStore>;
+    useTokenStore: ReturnType<typeof useTokenStore>;
+    useRefreshStore: ReturnType<typeof useRefreshStore>;
 }
 const appStore: IAppStore = {} as IAppStore;
 

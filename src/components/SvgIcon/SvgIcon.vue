@@ -1,69 +1,67 @@
 <template>
-    <svg :class="svgclass" aria-hidden="true" @mouseover="mouseover" @mouseleave="mouseleave">
-      <use :xlink:href="iconClassName" :fill="defaultColor" />
-    </svg>
-  </template>
+  <svg :class="svgclass" aria-hidden="true" @mouseover="mouseover" @mouseleave="mouseleave">
+    <use :xlink:href="iconClassName" :fill="defaultColor" />
+  </svg>
+</template>
   
-  <script setup lang="ts">
-  import { computed, ref } from 'vue';
-  
-  const props = defineProps({
-    iconName: {
-      type: String,
-      required: true
-    },
-    className: {
-      type: String,
-      default: ''
-    },
-    color: {
-      type: String,
-      default: '#409eff'
-    },
-    size: {
-      type: String,
-      default: '14px'
-    },
-    hoverColor: {
-      type: String,
-      default: '#2ddd9d'
-    },
-    isHover: {
-      type: Boolean,
-      default: false
-    }
-  })
-  const iconClassName = computed(() => {
-    return `#icon-${props.iconName}`;
-  })
-  const svgclass = computed(() => {
-    if (props.className) {
-      return `svg-icon ${props.className}`;
-    }
-    return 'svg-icon';
-  })
-  const defaultColor = ref<any>(props.color);
-  const mouseover = () => {
-    if (props.isHover) {
-      defaultColor.value = props.hoverColor
-    }
-    return
-  };
-  const mouseleave = () => {
-    if (props.isHover) {
-      defaultColor.value = props.color
-    }
-    return
-  };
-  </script>
-  
-  <style scoped lang="scss">
-  .svg-icon {
-    width: 1em;
-    height: 1em;
-    position: relative;
-    fill: currentColor;
-    vertical-align: -2px;
-    font-size: v-bind('props.size');
+<script setup lang="ts">
+const props = defineProps({
+  iconName: {
+    type: String,
+    required: true
+  },
+  className: {
+    type: String,
+    default: ''
+  },
+  color: {
+    type: String,
+    default: '#409eff'
+  },
+  size: {
+    type: String,
+    default: '14px'
+  },
+  hoverColor: {
+    type: String,
+    default: '#2ddd9d'
+  },
+  isHover: {
+    type: Boolean,
+    default: false
   }
-  </style>
+})
+const iconClassName = computed(() => {
+  return `#icon-${props.iconName}`;
+})
+const svgclass = computed(() => {
+  if (props.className) {
+    return `svg-icon ${props.className}`;
+  }
+  return 'svg-icon';
+})
+const defaultColor = ref<any>(props.color);
+const mouseover = () => {
+  if (props.isHover) {
+    defaultColor.value = props.hoverColor
+  }
+  return
+};
+const mouseleave = () => {
+  if (props.isHover) {
+    defaultColor.value = props.color
+  }
+  return
+};
+</script>
+  
+<style scoped lang="scss">
+.svg-icon {
+  width: 1em;
+  height: 1em;
+  position: relative;
+  fill: currentColor;
+  vertical-align: -2px;
+  font-size: v-bind('props.size');
+}
+</style>
