@@ -2,6 +2,8 @@
   <div ref="templateRef" class="template-select-box">
     <IntroduceTitle title="在线简历制作" subtitle="选择简历模板，点击在线制作，永久云端保存，可一键导出" title-color="#000" subtitle-color="#7f8b96">
     </IntroduceTitle>
+
+    <button @click="getTemplateListAsync.cancelAllRequest()"> 点击取消全部请求</button>
     <!-- 模板列表 -->
     <div class="card-list">
       <template v-if="templateList.length">

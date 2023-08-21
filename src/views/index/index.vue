@@ -8,6 +8,18 @@
 
     <!-- 简历模板展示 -->
     <template-select ref="templateRef"></template-select>
+
+    <!-- 自定义模板展示 -->
+    <custom-template ref="customTemplateRef"></custom-template>
+
+    <!-- 成为赞助者 -->
+    <SponsorCom ref="sponsorRefs"></SponsorCom>
+
+    <!-- 网站相关数据 -->
+    <WebData></WebData>
+
+    <!-- footer -->
+    <FooterCom></FooterCom>
   </div>
 </template>
 
@@ -15,6 +27,9 @@
 import { throttle } from 'lodash';
 import ProjectIntroduce from './components/ProjectIntroduce.vue';
 import TemplateSelect from './components/TemplateSelect.vue';
+import CustomTemplate from './components/CustomTemplate.vue';
+import SponsorCom from './components/SponsorCom.vue';
+import WebData from './components/WebData.vue';
 const navColor = ref<string>('');
 const fontColor = ref<string>('#fff');
 const iconColor = ref<string>('#fff');

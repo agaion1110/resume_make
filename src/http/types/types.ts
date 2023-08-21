@@ -1,19 +1,25 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
-export interface RequestInterceptors<T> {
-  // 请求拦截
-  requestInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig;
-  requestInterceptorsCatch?: (err: any) => any;
-  // 响应拦截
-  responseInterceptors?: (config: T) => T;
+// 拦截器的类型
+export interface RequestInterceptors {
+  // 请求拦截器
+  // 在发送请求之前做些什么
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+  // 对请求错误做些什么
+  requestInterceptorCatch?: (error: any) => any;
+
+  // 响应拦截器
+  // 对响应数据做点什么
+  responseInterceptor?: <T = AxiosResponse>(result: T) => T
+  // 对响应错误做点什么
   responseInterceptorsCatch?: (err: any) => any;
 }
-
 // 自定义传入的参数
-export interface RequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
-  interceptors?: RequestInterceptors<T>;
+export interface RequestConfig extends AxiosRequestConfig{
+  interceptors?: RequestInterceptors;
 }
-// 取消请求
-export interface CancelRequestSource {
-  [index: string]: () => void;
+
+export interface CancelRequestSource { 
+  // 取消请求的标识
+  [index: string]: AbortController;
 }

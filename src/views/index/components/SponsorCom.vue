@@ -7,11 +7,11 @@
       subtitle-color="#7f8b96"
     ></IntroduceTitle>
     <div class="sponsor-content-box">
-      <div v-if="!sponsorList.length" calss="top">
+      <div v-if="true" class="top">
         <img src="../../../assets/images/sponsor.svg" alt="" />
       </div>
       <div v-else class="sponsor-list-box">
-        <ul>
+        <!-- <ul>
           <li v-for="(item, index) in sponsorList" :key="index" @click="toSponsor(item)">
             <div class="img-box">
               <img :src="item.logo_url" alt="" />
@@ -20,7 +20,7 @@
               <p>{{ item.name }}</p>
             </div>
           </li>
-        </ul>
+        </ul> -->
       </div>
       <div class="bottom">
         <div class="button" @click="openSponsorDialog"> 成为赞助者 </div>
@@ -28,7 +28,6 @@
     </div>
     <!-- 赞助弹窗 -->
     <el-dialog
-      :model-value="dialogVisible"
       class="sponsor-dialog-wrapper"
       title="请填写赞助信息"
       width="840px"
@@ -47,31 +46,28 @@
             <!-- 表单 -->
             <el-form
               ref="ruleFormRef"
-              :model="ruleForm"
-              :rules="rules"
               size="default"
               label-width="120px"
               class="demo-ruleForm"
               status-icon
             >
               <el-form-item label="个人或企业名称:" prop="name">
-                <el-input v-model="ruleForm.name" placeholder="该名称会展示在赞助栏"></el-input>
+                <el-input  placeholder="该名称会展示在赞助栏"></el-input>
               </el-form-item>
               <el-form-item label="电子邮箱:">
                 <el-input
-                  v-model="ruleForm.email"
                   type="email"
                   placeholder="个人或者企业的电子邮箱"
                 />
               </el-form-item>
               <el-form-item label="联系微信:">
-                <el-input v-model="ruleForm.vx" placeholder="便于联系的个人或企业微信" />
+                <el-input  placeholder="便于联系的个人或企业微信" />
               </el-form-item>
               <el-form-item label="跳转链接:">
-                <el-input v-model="ruleForm.link" placeholder="点击赞助卡片需跳转的链接" />
+                <el-input  placeholder="点击赞助卡片需跳转的链接" />
               </el-form-item>
               <el-form-item label="上传logo:">
-                <el-upload
+                <!-- <el-upload
                   class="avatar-uploader"
                   :action="uploadAddress()"
                   :headers="{ Authorization: appStore.useTokenStore.token }"
@@ -81,10 +77,10 @@
                 >
                   <img v-if="ruleForm.logo_url" :src="ruleForm.logo_url" class="avatar" />
                   <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-                </el-upload>
+                </el-upload> -->
               </el-form-item>
               <el-form-item label="上传支付凭证:">
-                <el-upload
+                <!-- <el-upload
                   class="avatar-uploader"
                   :action="uploadAddress()"
                   :headers="{ Authorization: appStore.useTokenStore.token }"
@@ -94,7 +90,7 @@
                 >
                   <img v-if="ruleForm.sponsor_img" :src="ruleForm.sponsor_img" class="avatar" />
                   <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-                </el-upload>
+                </el-upload> -->
               </el-form-item>
             </el-form>
 
@@ -106,8 +102,8 @@
       </c-scrollbar>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="cancel">取消</el-button>
-          <el-button type="primary" :loading="isAddLoading" @click="confirm(ruleFormRef)"
+          <el-button @click="">取消</el-button>
+          <el-button type="primary"  @click=""
             >确定</el-button
           >
         </span>
@@ -117,111 +113,10 @@
 </template>
 
 <script setup lang="ts">
-  import IntroduceTitle from '@/views/index/components/IntroduceTitle.vue';
-  import { getSponsorListAsync, sponsorAddAsync } from '@/http/api/sponsor';
-  import { FormInstance, FormRules, UploadProps } from 'element-plus';
-  import CONFIG from '@/config';
-  import appStore from '@/store';
-
-  // 出现在可视区域
-  const sponsorRef = ref<any>(null);
-  const scrollIntoView = () => {
-    sponsorRef.value.scrollIntoView({ behavior: 'smooth' });
-  };
-  defineExpose({
-    scrollIntoView
-  });
-
-  // 赞助列表
-  const sponsorList = ref<any>([]);
-  const getSponsorList = async () => {
-    const data = await getSponsorListAsync();
-    if (data.status === 200) {
-      sponsorList.value = data.data.filter((item: any) => item.valid);
-    } else {
-      ElMessage.error(data.message);
-    }
-  };
-  getSponsorList();
-
-  // 跳转至赞助列表页
-  const toSponsor = (item: any) => {
-    window.open(item.link);
-  };
-
-  // 打开赞助弹框
-  const dialogVisible = ref<boolean>(false);
-  const openSponsorDialog = () => {
-    dialogVisible.value = true;
-  };
-
-  const ruleFormRef = ref<FormInstance>();
-  const ruleForm = reactive({
-    email: '',
-    link: '',
-    vx: '',
-    logo_url: '',
-    name: '',
-    sponsor_img: ''
-  });
-  const rules = reactive<FormRules>({
-    name: [{ required: true, message: '请填写个人或企业名称', trigger: 'change' }]
-  });
-
-  // 上传文件的请求地址
-  const uploadAddress = () => {
-    return CONFIG.serverAddress + '/huajian/upload/file/logo';
-  };
-
-  // 上传logo
-  const handleLogoSuccess: UploadProps['onSuccess'] = (response) => {
-    ruleForm.logo_url = response.data.data.fileUrl;
-  };
-  const beforeLogoUpload: UploadProps['beforeUpload'] = (rawFile) => {
-    if (rawFile.size / 1024 / 1024 > 5) {
-      ElMessage.error('logo大小不能大于5MB!');
-      return false;
-    }
-    return true;
-  };
-  // 上传支付凭证
-  const handlePaySuccess: UploadProps['onSuccess'] = (response) => {
-    ruleForm.sponsor_img = response.data.data.fileUrl;
-  };
-  const beforePayUpload: UploadProps['beforeUpload'] = (rawFile) => {
-    if (rawFile.size / 1024 / 1024 > 5) {
-      ElMessage.error('图片大小不能大于5MB!');
-      return false;
-    }
-    return true;
-  };
-
-  // 取消
-  const cancel = () => {
-    dialogVisible.value = false;
-  };
-  // 确定
-  const isAddLoading = ref<boolean>(false);
-  const confirm = async (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    await formEl.validate(async (valid, fields) => {
-      if (valid) {
-        isAddLoading.value = true;
-        const data = await sponsorAddAsync(ruleForm);
-        if (data.status === 200) {
-          ElMessage.success('感谢您的赞助，正在审核中');
-          dialogVisible.value = false;
-          formEl.resetFields();
-          isAddLoading.value = false;
-        } else {
-          ElMessage.error(data.message);
-          dialogVisible.value = false;
-        }
-      } else {
-        console.log('error submit!', fields);
-      }
-    });
-  };
+import IntroduceTitle from "./IntroduceTitle.vue";
+const openSponsorDialog = () => { 
+  
+}
 </script>
 <style lang="scss" scoped>
   .sponsor-box-wrapper {
