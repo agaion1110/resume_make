@@ -3,7 +3,7 @@
     <nav-bar :bg-color="navColor" :font-color="fontColor" :icon-color="iconColor"></nav-bar>
     <!-- 项目介绍栏 -->
     <div ref="introduceRef">
-      <project-introduce></project-introduce>
+      <project-introduce @free-make="freeMake" @custom-template="customTemple" @sponsor="sponsor"></project-introduce>
     </div>
 
     <!-- 简历模板展示 -->
@@ -58,6 +58,22 @@ const handleScroll = () => {
     iconColor.value = '#fff';
   }
 }
+// 点击免费制作
+const templateRef = ref<any>(null);
+const freeMake = () => {
+  templateRef.value.scrollIntoView();
+};
+// 点击自定义模板
+const customTemplateRef = ref<any>(null);
+const customTemple = () => {
+  customTemplateRef.value.scrollIntoView();
+};
+// 点击成为赞助者
+const sponsorRefs = ref<any>(null);
+const sponsor = () => {
+  sponsorRefs.value.scrollIntoView();
+};
+
 </script>
 
 <style scoped></style>

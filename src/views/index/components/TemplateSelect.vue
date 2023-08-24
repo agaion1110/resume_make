@@ -2,13 +2,11 @@
   <div ref="templateRef" class="template-select-box">
     <IntroduceTitle title="在线简历制作" subtitle="选择简历模板，点击在线制作，永久云端保存，可一键导出" title-color="#000" subtitle-color="#7f8b96">
     </IntroduceTitle>
-
-    <button @click="getTemplateListAsync.cancelAllRequest()"> 点击取消全部请求</button>
     <!-- 模板列表 -->
     <div class="card-list">
       <template v-if="templateList.length">
         <div v-for="(item, index) in templateList" :key="index" class="card-list-item-box">
-          <template-card :cardData="item" @to-design=""></template-card>
+          <template-card :cardData="item" @to-design="toDesign"></template-card>
         </div>
       </template>
       <template v-else>
@@ -19,7 +17,7 @@
     </div>
     <!-- 查看更多 -->
     <div class="more">
-      <div class="button" @click=""> 查看更多 </div>
+      <div class="button" @click="seeMore"> 查看更多 </div>
     </div>
   </div>
 </template>
@@ -29,7 +27,8 @@ import IntroduceTitle from './IntroduceTitle.vue';
 import { getTemplateListAsync } from '@/http/api/resume';
 // import { ITempList } from '@/template/type';
 // import { openGlobalLoading } from '@/utils/common';
-import appStore from '@/store';
+// import appStore from '@/store';
+// 查询模板列表
 const page = 1;
 const limit = 8;
 const templateList = ref<Array<any>>([]);
@@ -46,6 +45,32 @@ const getTemplateList = async () => {
   }
 };
 getTemplateList();
+
+// 跳转至设计页面
+const router = useRouter();
+const toDesign = (item: any) => { 
+  router.push({
+    path: '/designer',
+    query : {
+        id: item.ID
+      }
+  })
+}
+// 点击查看更多
+const seeMore = () => {
+  router.push({
+    name: 'Template'
+  });
+}
+
+// 出现在可视区域
+const templateRef = ref<any>(null);
+const scrollIntoView = () => {
+  // 使窗口平滑地移动到templateRef组件区域
+  templateRef.value.scrollIntoView({ behavior: 'smooth' });
+};
+// 暴露给父组件此组件的scrollIntoView方法
+defineExpose({ scrollIntoView });
 </script>
 
 <style lang="scss">

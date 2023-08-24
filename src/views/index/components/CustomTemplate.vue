@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-template-box">
+  <div ref="customTemplateRef" class="custom-template-box">
     <IntroduceTitle title="自定义模板 + 随心所欲" subtitle="自定义模板，随意搭配，自定义主题" title-color="#000" subtitle-color="#7f8b96">
     </IntroduceTitle>
     <div class="bottom">
@@ -17,6 +17,11 @@
 
 <script setup lang="ts">
 import IntroduceTitle from './IntroduceTitle.vue';
+const customTemplateRef = ref<any>(null);
+const scrollIntoView = () => {
+  customTemplateRef.value.scrollIntoView({ behavior: 'smooth' });
+};
+defineExpose({ scrollIntoView });
 </script>
 
 <style scoped lang="scss">
@@ -102,4 +107,5 @@ import IntroduceTitle from './IntroduceTitle.vue';
       }
     }
   }
-}</style>
+}
+</style>

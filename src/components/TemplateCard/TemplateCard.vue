@@ -8,7 +8,7 @@
                 <div v-if="cardData.NAME !== 'custom'" class="preview-icon" title="预览" @click="previewImg">
                     <svg-icon icon-name="yulan" class-name="yulan" color="#fff"></svg-icon>
                 </div>
-                <div class="design-button" @click="">立即免费制作</div>
+                <div class="design-button" @click="toDesign">立即免费制作</div>
             </div>
         </div>
         <!-- 使用人数 -->
@@ -36,9 +36,15 @@
 <script setup lang="ts">
 import { ITempData } from '../../template/type';
 import PreviewImage from '../PreviewImage/PreviewImage.vue';
+
 const props = defineProps<{
     cardData: ITempData;
 }>();
+const emit = defineEmits(['toDesign'])
+const toDesign = () => {
+    emit('toDesign',props.cardData);
+}
+
 // 控制遮罩层元素
 const maskLayerRef = ref<any>(null);
 // 当鼠标移到卡片上时，显示遮罩层

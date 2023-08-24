@@ -6,9 +6,9 @@
 
       <!-- 查看更多按钮 -->
       <div class="see-more-box">
-        <div class="button" @click=""> 免费制作 </div>
-        <div class="button" @click=""> 贡献模板 </div>
-        <div class="button" @click=""> 成为赞助者 </div>
+        <div class="button" @click="toFreeMake"> 免费制作 </div>
+        <div class="button" @click="toCustom"> 贡献模板 </div>
+        <div class="button" @click="toSponsor"> 成为赞助者 </div>
       </div>
     </div>
     <div class="right">
@@ -18,6 +18,16 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(['freeMake', 'customTemplate', 'sponsor']);
+const toFreeMake = () => { 
+  emit('freeMake');
+}
+const toCustom = () => { 
+  emit('customTemplate');
+}
+const toSponsor = () => {
+  emit('sponsor');
+}
 </script>
 
 <style lang="scss" scoped>

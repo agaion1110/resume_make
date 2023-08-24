@@ -24,17 +24,17 @@
     <div class="right">
       <!-- 登录注册以及用户展示区域 -->
       <div class="user-box">
-        <div v-if="false" class="logon-register-box">
-          <el-button class="register-btn" @click="openRegisterDialog">注册</el-button>
-          <el-button class="login-btn" type="primary" @click="openLoginDialog">登录</el-button>
+        <div v-if="!appStore.useUserInfoStore.userInfo" class="login-register-box">
+          <el-button class="register-btn " @click="openRegisterDialog" size="small">注册</el-button>
+          <el-button class="login-btn" type="primary" @click="openLoginDialog" size="small">登录</el-button>
         </div>
         <div v-else class="user-avatar-box">
           <el-dropdown>
             <span class="el-dropdown-link">
-              <el-avatar v-if="false" :size="45" src=""></el-avatar>
+              <el-avatar v-if="appStore.useUserInfoStore.userInfo.photos===undefined" :size="45"
+                :src="appStore.useUserInfoStore.userInfo.photos.profilePic.url"></el-avatar>
               <el-avatar v-else :size="45">
-                <!-- {{ appStore.useUserInfoStore.userInfo.name.split('')[0] }} -->
-                name
+                {{ appStore.useUserInfoStore.userInfo.name.split('')[0] }}
               </el-avatar>
             </span>
             <template #dropdown>
@@ -51,8 +51,8 @@
 </template>
 
 <script setup lang="ts">
-// import appStore from '@/store';
-// import LoginDialog from '@/components/LoginDialog/LoginDialog';
+import appStore from '@/store/index';
+import LoginDialog from '@/components/LoginDialog/LoginDialog';
 
 interface IBgcColor {
   fontColor?: string;
@@ -68,6 +68,7 @@ const props = withDefaults(defineProps<IBgcColor>(), {
   position: 'fixed'
 });
 const router = useRouter();
+
 // 菜单项
 const menuList = reactive([
   {
@@ -141,24 +142,25 @@ const nameColor = computed(() => {
 });
 // 打开注册弹窗
 const openRegisterDialog = () => {
-  // LoginDialog(false);
+  LoginDialog(true);
 };
 // 打开登录弹窗
 const openLoginDialog = () => {
-  // LoginDialog(true);
+  LoginDialog(true);
 };
 // 跳转至个人中心
 const toProfile = () => {
   router.push('/person');
 };
-// const { saveToken } = appStore.useTokenStore;
-// const { saveUserInfo } = appStore.useUserInfoStore;
-// const { setUuid } = appStore.useRefreshStore;
+
+const { saveToken } = appStore.useTokenStore;
+const { saveUserInfo } = appStore.useUserInfoStore;
+const { setUuid } = appStore.useRefreshStore;
 // 退出登录
 const logout = () => {
-  // saveToken(''); //  清除token
-  // saveUserInfo(''); //  清除用户信息
-  // setUuid(); //  全局刷新
+  saveToken(''); //  清除token
+  saveUserInfo(''); //  清除用户信息
+  setUuid(); //  全局刷新
   router.push('/'); //  返回首页
 };
 </script>
@@ -262,7 +264,7 @@ const logout = () => {
     .user-box {
       display: flex;
 
-      .logon-register-box {
+      .login-register-box {
         display: flex;
 
         .el-button {
@@ -277,7 +279,13 @@ const logout = () => {
           margin-left: 15px;
         }
 
-        .login-btn {}
+        .login-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 30px;
+          width: 65px;
+        }
       }
 
       .user-avatar-box {

@@ -19,7 +19,7 @@ import CScrollbar from "c-scrollbar";
 import "element-plus/theme-chalk/src/message.scss";
 // 注册store
 import { createPinia } from "pinia";
-// import { registerStore } from "@/store";
+import { registerStore } from "@/store";
 // 图片预览工具
 import "viewerjs/dist/viewer.css";
 import VueViewer from "v-viewer";
@@ -39,7 +39,7 @@ const app = createApp(App);
 
 app.use(createPinia());
 // 注册pinia状态管理库
-// registerStore();
+registerStore();
 
 app.use(router);
 // app.use(component);
