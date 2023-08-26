@@ -22,7 +22,7 @@
       <div class="lines"></div>
       <li>
         <svg-icon
-          icon-name="bilibili-copy"
+          icon-name="icon-bilibili-copy"
           class-name="bilibili"
         ></svg-icon>
         <a href="http://wei-z.top" target="_blank" rel="noopener noreferrer">Aurora' Blog</a

@@ -2,7 +2,7 @@ import appStore from '@/store';
 import { uuid } from 'vue-uuid';
 import moment from 'moment'; //  日期处理
 
-// 生成uuid（唯一标识id，用户登录成功后作为refreshToken，利用双token实现无感刷新）
+// 生成uuid（唯一标识id，为组件添加key）
 export const getUuid = (): string => {
     return uuid.v4().split('-').join('');
 }
@@ -26,3 +26,11 @@ export const formatDateToYMD = (dateString: string): string => {
       return '暂无数据';
     }
   };
+// 获取 src/assets/material 下的静态资源
+export const getAssetsMaterialFile = (path: string, url: string) => {
+  return new URL(`../assets/images/material/${path}/${url}`, import.meta.url).href;
+};
+// 获取简历背景小图片资源
+export const getAssetsResumeBgcFile = (url: string) => {
+  return new URL(`../assets/images/resumeBackground/${url}`, import.meta.url).href;
+};

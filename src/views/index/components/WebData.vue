@@ -6,7 +6,7 @@
     <div class="list-box">
       <ul ref="ulNumberRef">
         <li>
-          <svg-icon icon-name="fangwenliang" class-name="juejin" size="70px" color="#00c090"></svg-icon>
+          <svg-icon icon-name="icon-fangwenliang" class-name="juejin" size="70px" color="#00c090"></svg-icon>
           <p>
             <count-to ref="numberRef3" class="number" :start-val="0" :end-val="webData.trafficnumber" separator=","
               :duration="4000">
@@ -16,7 +16,7 @@
           <h1>累积访问量</h1>
         </li>
         <li>
-          <svg-icon icon-name="renwu-ren" class-name="juejin" size="70px" color="#00c090"></svg-icon>
+          <svg-icon icon-name="icon-renwu-ren" class-name="juejin" size="70px" color="#00c090"></svg-icon>
           <p>
             <count-to ref="numberRef1" class="number" :start-val="0" :end-val="webData.usernumber" :duration="4000"
               separator=","></count-to>
@@ -25,7 +25,7 @@
           <h1>累计注册</h1>
         </li>
         <li>
-          <svg-icon icon-name="caogaoxiang" class-name="juejin" size="70px" color="#00c090"></svg-icon>
+          <svg-icon icon-name="icon-caogaoxiang" class-name="juejin" size="70px" color="#00c090"></svg-icon>
           <p>
             <count-to ref="numberRef2" class="number" :start-val="0" :end-val="webData.resumenumber" :duration="4000"
               separator=","></count-to>

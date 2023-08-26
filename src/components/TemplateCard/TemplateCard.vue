@@ -6,7 +6,7 @@
             <!-- 遮罩层 -->
             <div ref="maskLayerRef" class="mask-layer">
                 <div v-if="cardData.NAME !== 'custom'" class="preview-icon" title="预览" @click="previewImg">
-                    <svg-icon icon-name="yulan" class-name="yulan" color="#fff"></svg-icon>
+                    <svg-icon icon-name="icon-yulan" class-name="yulan" color="#fff"></svg-icon>
                 </div>
                 <div class="design-button" @click="toDesign">立即免费制作</div>
             </div>

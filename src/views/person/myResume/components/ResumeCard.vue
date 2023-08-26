@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-  import { ITempList } from '@/template/type';
+  import { ITempData } from '@/template/type';
   import { ElMessageBox } from 'element-plus';
   import 'element-plus/es/components/message-box/style/index';
 
   const props = defineProps<{
-    cardData: ITempList;
+    cardData: ITempData;
   }>();
   // 鼠标移入/移除时  显示/隐藏遮罩层
   const isShowLayer = ref<boolean>(false);

@@ -1,7 +1,7 @@
 <template>
     <div class="logo" @click="toHome">
       <svg-icon
-        icon-name="huojian"
+        icon-name="icon-huojian"
         class-name="bilibili"
         :color="iconColor"
         size="25px"

@@ -32,7 +32,7 @@ const props = defineProps({
   }
 })
 const iconClassName = computed(() => {
-  return `#icon-${props.iconName}`;
+  return `#${props.iconName}`;
 })
 const svgclass = computed(() => {
   if (props.className) {

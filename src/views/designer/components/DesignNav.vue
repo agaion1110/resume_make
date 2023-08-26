@@ -9,13 +9,13 @@
                 <div class="nav-center-left-box">
                     <el-tooltip effect="dark" content="新增任意简历模块" placement="bottom">
                         <div class="icon-box" @click="openAddDrawer">
-                            <svg-icon icon-name="database" color="#555" size="17px"></svg-icon>
+                            <svg-icon icon-name="icon-database" color="#555" size="17px"></svg-icon>
                             <span class="icon-tips">添加模块</span>
                         </div>
                     </el-tooltip>
                     <el-tooltip effect="dark" content="切换另一个模板" placement="bottom">
                         <div class="icon-box" @click="switchDrawer">
-                            <svg-icon icon-name="shangchengmoban" color="#555" size="17px"></svg-icon>
+                            <svg-icon icon-name="icon-shangchengmoban" color="#555" size="17px"></svg-icon>
                             <span class="icon-tips">切换模板</span>
                         </div>
                     </el-tooltip>
@@ -39,48 +39,58 @@
         <div class="nav-right">
             <el-tooltip effect="dark" content="下载到本地" placement="bottom">
                 <div class="icon-box icon-download" @click="downloadResume">
-                    <svg-icon icon-name="xiazai" color="#fff" size="17px"></svg-icon>
+                    <svg-icon icon-name="icon-xiazai" color="#fff" size="17px"></svg-icon>
                     <span class="icon-tips">下载</span>
                 </div>
             </el-tooltip>
             <el-tooltip effect="dark" content="预览简历" placement="bottom">
                 <div class="icon-box" @click="previewResume">
-                    <svg-icon icon-name="yulan1" color="#555" size="19px"></svg-icon>
+                    <svg-icon icon-name="icon-yulan1" color="#555" size="19px"></svg-icon>
                     <span class="icon-tips">预览</span>
                 </div>
             </el-tooltip>
             <el-tooltip effect="dark" content="保存为草稿" placement="bottom">
                 <div class="icon-box" @click="saveDraft">
-                    <svg-icon icon-name="caogaoxiang1" color="#555" size="17px"></svg-icon>
+                    <svg-icon icon-name="icon-caogaoxiang1" color="#555" size="17px"></svg-icon>
                     <span class="icon-tips">暂存</span>
                 </div>
             </el-tooltip>
             <el-tooltip effect="dark" content="重置所有设置" placement="bottom">
                 <div class="icon-box" @click="reset">
-                    <svg-icon icon-name="zhongzhi" color="#555" size="17px"></svg-icon>
+                    <svg-icon icon-name="icon-zhongzhi" color="#555" size="17px"></svg-icon>
                     <span class="icon-tips">重置</span>
                 </div>
             </el-tooltip>
             <el-tooltip effect="dark" content="导出为JSON数据" placement="bottom">
                 <div class="icon-box" @click="exportJSON">
-                    <svg-icon icon-name="xiazai" color="#555" size="17px"></svg-icon>
+                    <svg-icon icon-name="icon-xiazai" color="#555" size="17px"></svg-icon>
                     <span class="icon-tips">JSON</span>
                 </div>
             </el-tooltip>
             <el-tooltip effect="dark" content="将你的简历分享给别人" placement="bottom">
                 <div class="icon-box" @click="publishOnlineResume">
-                    <svg-icon icon-name="fenxiang" color="#555" size="17px"></svg-icon>
+                    <svg-icon icon-name="icon-fenxiang" color="#555" size="17px"></svg-icon>
                     <span class="icon-tips">分享</span>
                 </div>
             </el-tooltip>
             <el-tooltip class="box-item" effect="dark" content="导入JSON数据" placement="bottom">
                 <div class="icon-box" @click="importJson">
-                    <svg-icon icon-name="yunduanshangchuan" color="#555" size="19px"></svg-icon>
+                    <svg-icon icon-name="icon-yunduanshangchuan" color="#555" size="19px"></svg-icon>
                     <span class="icon-tips">导入JSON</span>
                 </div>
             </el-tooltip>
         </div>
     </nav>
+    <!-- 增加自定义模块抽屉 -->
+  <AddCustomModelDrawer
+    :drawer-visible="drawerVisible"
+    @close-add-drawer="closeAddDrawer"
+  ></AddCustomModelDrawer>
+  <!-- 切换模板抽屉 -->
+  <SwitchTemplateDrawer
+    :drawer-switch-visible="drawerSwitchVisible"
+    @close-switch-drawer="closeSwitchDrawer"
+  ></SwitchTemplateDrawer>
     <!-- 预览弹窗 -->
     <PreviewImage v-show="dialogPreviewVisible" @close="closePreview">
         <ResumePreview></ResumePreview>
@@ -90,6 +100,8 @@
 <script setup lang="ts">
 import appStore from '@/store';
 import { storeToRefs } from 'pinia';
+import AddCustomModelDrawer from './AddCustomModelDrawer.vue';
+import SwitchTemplateDrawer from './SwitchTemplateDrawer.vue';
 // 是否展示标题输入框
 const isShowIpt = ref(false);
 // 简历描述
@@ -98,14 +110,26 @@ let draftTips = ref('简历描述');
 let { resumeJsonNewStore } = storeToRefs(appStore.useResumeJsonNewStore);
 // 控制简历预览弹窗
 let dialogPreviewVisible = ref(false);
+
 // 新增任意简历模块
+const drawerVisible = ref<boolean>(false);
 const openAddDrawer = () => {
+    drawerVisible.value = true;
     console.log('新增任意简历模块');
 }
-// 切换简历模块
-const switchDrawer = () => {
-    console.log('切换简历模块');
+const closeAddDrawer = () => { 
+    drawerVisible.value = false;
 }
+
+// 打开 切换模板 抽屉
+const drawerSwitchVisible = ref<boolean>(false);
+const switchDrawer = () => {
+    drawerSwitchVisible.value = true;
+}
+const closeSwitchDrawer = () => { 
+    drawerSwitchVisible.value = false;
+}
+
 // 点击修改标题
 const changeTitle = () => {
     isShowIpt.value = true;

@@ -15,7 +15,7 @@
       <div class="right">
         <div :class="['sort-box', { active: currentSort === 'time' }]" @click="handleSort('time')">
           <svg-icon
-            icon-name="shijian"
+            icon-name="icon-shijian"
             class-name="juejin"
             size="20px"
             :color="currentSort === 'time' ? '#018060' : '#ccc'"

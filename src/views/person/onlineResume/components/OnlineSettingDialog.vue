@@ -68,7 +68,7 @@
   import useClipboard from 'vue-clipboard3';
   import { FormInstance, FormRules } from 'element-plus';
   import { updateOnlineResumeAsync } from "@/http/api/resume";
-  import QrCode from '@/components/QrCode/QrCode.vue';
+  // import QrCode from '@/components/QrCode/QrCode.vue';
 
   interface IDialog {
     dialogOnlineVisible: boolean;

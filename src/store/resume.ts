@@ -4,7 +4,7 @@ import RESUME_JSON from '@/schema/resume';
 import IRESUMEJSON from '@/interface/resume';
 import { IMATERIALITEM } from '@/interface/material';
 
-// 新的简历store
+// 简历数据小仓库
 export const useResumeJsonNewStore = defineStore('resumeJsonNew', () => {
   const resume_json = cloneDeep(RESUME_JSON); // 简历数据
   const importJson = ref<IRESUMEJSON>(resume_json); //  导入的JSON数据
@@ -36,7 +36,7 @@ export const useResumeJsonNewStore = defineStore('resumeJsonNew', () => {
     resetResumeJson
   };
 });
-
+// 简历物料组成小仓库
 export const useSelectMaterialStore = defineStore('selectMaterialStore', () => {
   const cptName = ref<string>(''); // 选中的模块名称
   const cptOptionsName = ref<string>(''); // 选中的组件属性面板名称
