@@ -22,6 +22,18 @@
                     </div>
                 </component>
             </div>
+            <div class="config" ref="configRef" :key="refreshUuid">
+                <TitleConfig :title="cptTitle" @unfold-or-collapse="unfoldOrCollapseConfig"></TitleConfig>
+                <c-scrollbar trigger="hover" :h-thumb-style="{
+                    'background-color': 'rgba(0,0,0,0.4)'
+                }">
+                    <component :is="optionsComponents[appStore.useSelectMaterialStore.cptOptionsName]"
+                        v-if="appStore.useSelectMaterialStore.cptName" :key="appStore.useSelectMaterialStore.cptKeyId">
+                    </component>
+                    <!-- 全局主题样式设置 -->
+                    <GlobalStyleOptionsVue v-else></GlobalStyleOptionsVue>
+                </c-scrollbar>
+            </div>
         </div>
     </div>
 </template>
@@ -36,6 +48,9 @@ import IDESIGNJSON from '@/interface/design';
 import { getResetTemplateInfoAsync, getTemplateInfoAsync } from '@/http/api/resume';
 import resumeBackgroundComponents from '@/utils/registerResumeBackgroundCom';
 import custom from '@/template/custom/index.vue';
+import optionsComponents from '@/utils/registerMaterialOptionsCom';
+import GlobalStyleOptionsVue from '@/options/GlobalStyleOptions.vue';
+import TitleConfig from './components/TitleConfig.vue';
 // 简历的基本数据变量
 const route = useRoute();
 // 简历标题
@@ -110,9 +125,20 @@ const addCustomModelLeftRight = (item: any) => {
 provide('addCustomModelLeftRight', addCustomModelLeftRight);
 
 // 子组件内容发生变化时--->需要重新计算高度，触发resizeDOM
-const contentHeightChange = async (height: number) => { 
+const contentHeightChange = async (height: number) => {
     console.log('内容发生变化，需要重新计算高度');
 }
+
+// 展开或收起属性面板
+const configRef = ref<any>(null);
+const unfoldOrCollapseConfig = (status: boolean) => {
+  if (status) {
+    configRef.value.style.width = '355px';
+    configRef.value.style.flex = 'inherit';
+  } else {
+    configRef.value.style.flex = 1;
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -136,9 +162,6 @@ const contentHeightChange = async (height: number) => {
         }
 
         .center {
-            // display: flex;
-            // justify-content: center;
-            // align-items: flex-start;
             flex: 1;
             min-width: 840px;
             height: calc(100vh - 50px);
