@@ -10,14 +10,8 @@
     </template>
     <!-- 传统布局 -->
     <template v-else-if="resumeJsonNewStore.LAYOUT === 'classical'">
-      <draggable
-        class="dragArea list-group"
-        :list="resumeJsonNewStore.COMPONENTS"
-        animation="500"
-        group="custom"
-        :sort="true"
-        item-key="id"
-      >
+      <draggable class="dragArea list-group" :list="resumeJsonNewStore.COMPONENTS" animation="500" group="custom"
+        :sort="true" item-key="id">
         <template #item="{ element }">
           <div class="list-group-item">
             <ModelBox :item="element" :components="MaterialComponents"></ModelBox>
@@ -223,4 +217,5 @@ defineExpose({
       font-size: 12px;
     }
   }
-}</style>
+}
+</style>

@@ -65,13 +65,13 @@ const unfoldOrCollapse = (status: boolean) => {
     if (status) {
         // 展开
         setTimeout(() => {
-            leftShowStatus.value = true;
+            leftShowStatus.value = status;
         }, 100);
         leftRef.value.style.width = '300px';
     } else {
         // 折叠
         setTimeout(() => {
-            leftShowStatus.value = false;
+            leftShowStatus.value = status;
         }, 100);
         leftRef.value.style.width = '70px';
     }
@@ -101,10 +101,10 @@ resetStoreAndLocal();
 // 放大缩小center
 const sizeCenter = ref<number>(1);
 const addSize = (number: number) => {
-    sizeCenter.value += number;
+    sizeCenter.value = number;
 };
 const reduceSize = (number: number) => {
-    sizeCenter.value -= number;
+    sizeCenter.value = number;
 }
 // 返回简历背景
 const resumeBackgroundName = computed(() => {

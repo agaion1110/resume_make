@@ -82,15 +82,10 @@
         </div>
     </nav>
     <!-- 增加自定义模块抽屉 -->
-  <AddCustomModelDrawer
-    :drawer-visible="drawerVisible"
-    @close-add-drawer="closeAddDrawer"
-  ></AddCustomModelDrawer>
-  <!-- 切换模板抽屉 -->
-  <SwitchTemplateDrawer
-    :drawer-switch-visible="drawerSwitchVisible"
-    @close-switch-drawer="closeSwitchDrawer"
-  ></SwitchTemplateDrawer>
+    <AddCustomModelDrawer :drawer-visible="drawerVisible" @close-add-drawer="closeAddDrawer"></AddCustomModelDrawer>
+    <!-- 切换模板抽屉 -->
+    <SwitchTemplateDrawer :drawer-switch-visible="drawerSwitchVisible" @close-switch-drawer="closeSwitchDrawer">
+    </SwitchTemplateDrawer>
     <!-- 预览弹窗 -->
     <PreviewImage v-show="dialogPreviewVisible" @close="closePreview">
         <ResumePreview></ResumePreview>
@@ -102,6 +97,8 @@ import appStore from '@/store';
 import { storeToRefs } from 'pinia';
 import AddCustomModelDrawer from './AddCustomModelDrawer.vue';
 import SwitchTemplateDrawer from './SwitchTemplateDrawer.vue';
+import { updateOnlineResumeAsync, updateUserresumeAsync } from '@/http/api/resume';
+import moment from 'moment';
 // 是否展示标题输入框
 const isShowIpt = ref(false);
 // 简历描述
@@ -117,7 +114,7 @@ const openAddDrawer = () => {
     drawerVisible.value = true;
     console.log('新增任意简历模块');
 }
-const closeAddDrawer = () => { 
+const closeAddDrawer = () => {
     drawerVisible.value = false;
 }
 
@@ -126,7 +123,7 @@ const drawerSwitchVisible = ref<boolean>(false);
 const switchDrawer = () => {
     drawerSwitchVisible.value = true;
 }
-const closeSwitchDrawer = () => { 
+const closeSwitchDrawer = () => {
     drawerSwitchVisible.value = false;
 }
 
@@ -145,13 +142,32 @@ const downloadResume = () => {
     console.log('点击下载');
 }
 // 点击预览
-const previewResume = () => { 
+const previewResume = () => {
     dialogPreviewVisible.value = true;
     console.log('点击预览');
 }
 // 保存为草稿
-const saveDraft = () => { 
-    console.log('点击保存为草稿');
+const saveDraft = async () => {
+    console.log('暂存',resumeJsonNewStore.value.COMPONENTS);
+    const data = await updateUserresumeAsync(resumeJsonNewStore.value);
+    
+    
+    if (data.code === 200) {
+        if (data.data.status === 200) {
+            const time = moment(new Date()).format('YYYY.MM.DD HH:mm:ss');
+            draftTips.value = `已自动保存草稿  ${time}`;
+            // 手动保存
+
+            ElMessage.success({
+                message: '保存草稿成功!',
+                type: 'success',
+                center: true
+            });
+
+        } else {
+            draftTips.value = '自动保存草稿失败！';
+        }
+    }
 }
 // 重置所有设置
 const reset = () => {
@@ -170,7 +186,7 @@ const importJson = () => {
     console.log('导入JSON数据');
 }
 // 点击关闭预览
-const closePreview = () => { 
+const closePreview = () => {
     console.log('点击关闭预览');
     dialogPreviewVisible.value = false;
 }
