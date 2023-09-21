@@ -1,6 +1,5 @@
 import { fileURLToPath } from 'url';
 import { ConfigEnv, defineConfig, loadEnv } from 'vite';
-
 import { createBuild } from './build/vite/build';
 import { wrapperEnv } from './build/utils';
 import { createProxy } from './build/vite/proxy';

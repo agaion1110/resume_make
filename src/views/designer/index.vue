@@ -51,6 +51,7 @@ import custom from '@/template/custom/index.vue';
 import optionsComponents from '@/utils/registerMaterialOptionsCom';
 import GlobalStyleOptionsVue from '@/options/GlobalStyleOptions.vue';
 import TitleConfig from './components/TitleConfig.vue';
+import { closeGlobalLoading } from '@/utils/common';
 // 简历的基本数据变量
 const route = useRoute();
 // 简历标题
@@ -139,6 +140,9 @@ const unfoldOrCollapseConfig = (status: boolean) => {
     configRef.value.style.flex = 1;
   }
 };
+onMounted(() => {
+    closeGlobalLoading(); //  关闭全局等待层
+})
 </script>
 
 <style lang="scss" scoped>

@@ -49,7 +49,7 @@ const throttleHandle = throttle(() => {
 // 滚动事件
 const handleScroll = () => {
   if (document.documentElement.scrollTop > 0) {
-    navColor.value = '#fff';
+    navColor.value = '';
     fontColor.value = 'green';
     iconColor.value = 'green';
   } else {

@@ -77,6 +77,31 @@ if (resumeJsonNewStore.LAYOUT === 'leftRight') {
   leftList.value = resumeJsonNewStore.COMPONENTS.filter((item) => item.layout === 'left');
   rightList.value = resumeJsonNewStore.COMPONENTS.filter((item) => item.layout === 'right');
 }
+watch(
+  () => leftList.value,
+  (val) => {
+    leftList.value.forEach((item: IMATERIALITEM) => {
+      item.layout = 'left';
+    });
+    resumeJsonNewStore.COMPONENTS = leftList.value.concat(rightList.value);
+  },
+  {
+    deep: true
+  }
+)
+watch(
+  () => rightList.value,
+  (val) => {
+    rightList.value.forEach((item: IMATERIALITEM) => {
+      item.layout = 'right';
+    });
+    resumeJsonNewStore.COMPONENTS = leftList.value.concat(rightList.value);
+  },
+  {
+    deep: true
+  }
+)
+
 // 左侧模块复制
 const leftAdd = (modelItem: IMATERIALITEM) => {
   //  需要复制的模块的索引

@@ -9,22 +9,40 @@
       <div class="right-box">
         <h1>丰富的物料模块组件，可随意进行搭配，还可进行主题配置等等</h1>
         <p>自定义的模板可提交至官方，将在首页展出，感谢您的贡献</p>
-        <div class="button" @click=""> 贡献模板 </div>
+        <div class="button" @click="toCustom"> 贡献模板 </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import appStore from '@/store';
 import IntroduceTitle from './IntroduceTitle.vue';
+import { openGlobalLoading } from '@/utils/common';
+
+
+// 出现在可视区域
 const customTemplateRef = ref<any>(null);
 const scrollIntoView = () => {
   customTemplateRef.value.scrollIntoView({ behavior: 'smooth' });
 };
-defineExpose({ scrollIntoView });
+defineExpose({
+  scrollIntoView
+});
+
+// 点击立即贡献 
+const router = useRouter();
+const { resetResumeJson } = appStore.useResumeJsonNewStore;
+const toCustom = () => {
+  resetResumeJson(); // 重置简历数据
+  openGlobalLoading(); //  打开等待动画层
+  router.push({
+    path: '/custom'
+  });
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .custom-template-box {
   min-height: 80vh;
   width: 100%;
@@ -107,5 +125,4 @@ defineExpose({ scrollIntoView });
       }
     }
   }
-}
-</style>
+}</style>

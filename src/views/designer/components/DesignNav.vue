@@ -90,6 +90,10 @@
     <PreviewImage v-show="dialogPreviewVisible" @close="closePreview">
         <ResumePreview></ResumePreview>
     </PreviewImage>
+
+    <!-- 下载(导出)弹窗 -->
+    <DownloadDialog :dialog-download-visible="dialogDownloadVisible" @close-download-dialog="closeDownloadDialog"
+        @download-file="downloadResumeFile"></DownloadDialog>
 </template>
   
 <script setup lang="ts">
@@ -97,12 +101,16 @@ import appStore from '@/store';
 import { storeToRefs } from 'pinia';
 import AddCustomModelDrawer from './AddCustomModelDrawer.vue';
 import SwitchTemplateDrawer from './SwitchTemplateDrawer.vue';
-import { updateOnlineResumeAsync, updateUserresumeAsync } from '@/http/api/resume';
+import { getUserResumeListAsync, updateOnlineResumeAsync, updateUserresumeAsync } from '@/http/api/resume';
 import moment from 'moment';
+import { ElMessageBox } from 'element-plus';
 // 是否展示标题输入框
 const isShowIpt = ref(false);
-// 简历描述
-let draftTips = ref('简历描述');
+const router = useRouter();
+const route = useRoute();
+// 获取简历的id
+const id = route.query;
+
 // store里的模板数据
 let { resumeJsonNewStore } = storeToRefs(appStore.useResumeJsonNewStore);
 // 控制简历预览弹窗
@@ -112,7 +120,6 @@ let dialogPreviewVisible = ref(false);
 const drawerVisible = ref<boolean>(false);
 const openAddDrawer = () => {
     drawerVisible.value = true;
-    console.log('新增任意简历模块');
 }
 const closeAddDrawer = () => {
     drawerVisible.value = false;
@@ -126,21 +133,93 @@ const switchDrawer = () => {
 const closeSwitchDrawer = () => {
     drawerSwitchVisible.value = false;
 }
+// 保存草稿数据到本地
+// 简历描述
+let draftTips = ref<string>('');
+const saveDataToLocal = async (isHandle?: boolean) => {
+    return new Promise(async (resolve, reject) => {
+        // 先查询用户个人简历是否超过4份
+        const params = {
+            page: 1,
+            limit: 10
+        };
+        const listData = await getUserResumeListAsync(params);
+        if (listData.data.status === 200) {
+            // 先过滤掉本条数据
+            let realList = [];
+            listData.data.data.list.map((item: any) => {
+                if (item.ID !== id) {
+                    realList.push(item);
+                }
+            });
+            // 判断用户简历数量是否超过
+            if (realList.length >= 4) {
+                ElMessageBox.confirm(
+                    '每位用户的简历数量最多4份，您已超过4份简历，如要继续使用，请前往个人中心删除部分简历！',
+                    '温馨提示',
+                    {
+                        confirmButtonText: '前往',
+                        cancelButtonText: '取消'
+                    }
+                )
+                    .then(() => {
+                        router.push('/person/myResume');
+                    })
+                    .catch((err) => console.log(err));
+                // 简历份数超限制
+                reject(null);
+            } else {
+                console.log('新拿到的', resumeJsonNewStore.value.COMPONENTS);
+
+                const data = await updateUserresumeAsync(resumeJsonNewStore.value);
+                if (data.data.status === 200) {
+                    const time = moment(new Date()).format('YYYY.MM.DD HH:mm:ss');
+                    draftTips.value = `已自动保存草稿  ${time}`;
+                    // 手动保存
+                    if (isHandle) {
+                        ElMessage.success({
+                            message: '保存草稿成功!',
+                            type: 'success',
+                            center: true
+                        });
+                    }
+                    resolve('保存草稿成功!');
+                } else {
+                    draftTips.value = '自动保存草稿失败！';
+                    reject(null);
+                }
+            }
+        } else {
+            ElMessage.error(listData.data.message);
+            reject(null);
+        }
+    });
+};
+
 
 // 点击修改标题
+let titleIpf = ref<any>();
 const changeTitle = () => {
     isShowIpt.value = true;
-    console.log('修改标题');
+    titleIpf.value.focus();
 }
 // 输入框失去焦点，隐藏输入框，展示标题
 const blurTitle = () => {
     isShowIpt.value = false;
-    console.log('失去焦点');
 }
 // 下载到本地
+const dialogDownloadVisible = ref<boolean>(false);
 const downloadResume = () => {
-    console.log('点击下载');
+    dialogDownloadVisible.value = true;
 }
+// 关闭下载弹窗
+const closeDownloadDialog = () => {
+    dialogDownloadVisible.value = false;
+};
+// 点击下载
+const downloadResumeFile = async (type: string) => {
+
+};
 // 点击预览
 const previewResume = () => {
     dialogPreviewVisible.value = true;
@@ -148,27 +227,9 @@ const previewResume = () => {
 }
 // 保存为草稿
 const saveDraft = async () => {
-    console.log('暂存',resumeJsonNewStore.value.COMPONENTS);
-    const data = await updateUserresumeAsync(resumeJsonNewStore.value);
-    
-    
-    if (data.code === 200) {
-        if (data.data.status === 200) {
-            const time = moment(new Date()).format('YYYY.MM.DD HH:mm:ss');
-            draftTips.value = `已自动保存草稿  ${time}`;
-            // 手动保存
-
-            ElMessage.success({
-                message: '保存草稿成功!',
-                type: 'success',
-                center: true
-            });
-
-        } else {
-            draftTips.value = '自动保存草稿失败！';
-        }
-    }
+    saveDataToLocal(true)
 }
+
 // 重置所有设置
 const reset = () => {
     console.log('重置所有设置');
