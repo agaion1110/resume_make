@@ -13,6 +13,7 @@ const MyComment = () => import('@/views/person/myComment/index.vue');
 const MyResume = () => import('@/views/person/myResume/index.vue');
 const MyOnlineResume = () => import('@/views/person/onlineResume/index.vue');
 const MyContribute = () => import('@/views/person/myContribute/index.vue');
+const Custom = () => import('@/views/custom/index.vue');
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,6 +37,17 @@ const routes: Array<RouteRecordRaw> = [
       requireLogin: true
     },
     component: Designer
+  },
+  {
+    path: '/custom',
+    name: 'Custom',
+    meta: {
+      title: '自定义',
+      keepAlive: true,
+      isShowComNav: false,
+      requireLogin: false
+    },
+    component: Custom
   },
   {
     path: '/template',

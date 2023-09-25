@@ -111,6 +111,8 @@ const route = useRoute();
 // 获取简历的id
 const id = route.query;
 
+const emit = defineEmits(['generateReport', 'generateReportNew', 'reset']);
+
 // store里的模板数据
 let { resumeJsonNewStore } = storeToRefs(appStore.useResumeJsonNewStore);
 // 控制简历预览弹窗
@@ -170,7 +172,6 @@ const saveDataToLocal = async (isHandle?: boolean) => {
                 reject(null);
             } else {
                 console.log('新拿到的', resumeJsonNewStore.value.COMPONENTS);
-
                 const data = await updateUserresumeAsync(resumeJsonNewStore.value);
                 if (data.data.status === 200) {
                     const time = moment(new Date()).format('YYYY.MM.DD HH:mm:ss');
@@ -218,15 +219,17 @@ const closeDownloadDialog = () => {
 };
 // 点击下载
 const downloadResumeFile = async (type: string) => {
-
-};
+    await saveDataToLocal();
+    emit('generateReport', type);
+    closeDownloadDialog();
+}
 // 点击预览
 const previewResume = () => {
     dialogPreviewVisible.value = true;
-    console.log('点击预览');
 }
 // 保存为草稿
 const saveDraft = async () => {
+    // 手动保存
     saveDataToLocal(true)
 }
 

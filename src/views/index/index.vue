@@ -20,6 +20,25 @@
 
     <!-- footer -->
     <FooterCom></FooterCom>
+    <!-- 回到顶部 -->
+    <el-backtop :bottom="100">
+      <div
+        style="
+          height: 100%;
+          width: 100%;
+          background-color: var(--el-bg-color-overlay);
+          box-shadow: var(--el-box-shadow-lighter);
+          text-align: center;
+          line-height: 40px;
+          color: #19fa5c;
+          user-select: none;
+          border-radius: 50%;
+          font-size: 14px;
+        "
+      >
+      👆 
+      </div>
+    </el-backtop>
   </div>
 </template>
 
@@ -49,7 +68,7 @@ const throttleHandle = throttle(() => {
 // 滚动事件
 const handleScroll = () => {
   if (document.documentElement.scrollTop > 0) {
-    navColor.value = '';
+    navColor.value = '#fff';
     fontColor.value = 'green';
     iconColor.value = 'green';
   } else {

@@ -52,6 +52,9 @@ import optionsComponents from '@/utils/registerMaterialOptionsCom';
 import GlobalStyleOptionsVue from '@/options/GlobalStyleOptions.vue';
 import TitleConfig from './components/TitleConfig.vue';
 import { closeGlobalLoading } from '@/utils/common';
+import { type } from 'os';
+import { values } from 'lodash';
+import { exportPNG, exportPdf } from '@/utils/pdf';
 // 简历的基本数据变量
 const route = useRoute();
 // 简历标题
@@ -124,6 +127,33 @@ const addCustomModelLeftRight = (item: any) => {
     }
 };
 provide('addCustomModelLeftRight', addCustomModelLeftRight);
+// 分割线模块化ref
+const html2Pdf = ref<any>(null);
+let lineRefs: Array<any> = []; // 分割线的ref
+const setLinesRef = (el: any, index: number) => {
+    if (el) {
+        if (linesNumber.value === index + 1) {
+            el.style.top = linesNumber.value * 1160 + 'px'; //  最后一条分割线出现在底部
+        }
+        lineRefs.push(el);
+    }
+};
+// 监听内容元素高度变化，绘制分割线
+const htmlContentPdf = ref<any>(null);
+const linesNumber = ref<number>(0);
+let observer: ResizeObserver | null = null;
+let height = 0;
+const resizeDOM = () => {
+    observer = new ResizeObserver(async (entries: ResizeObserverEntry[]) => {
+        for (let entry of entries) {
+            height = (entry.target as HTMLElement).offsetHeight;
+            linesNumber.value = Math.ceil(height / 1160); //  计算分割线数目
+            html2Pdf.value.$el.style.height = 1160 * linesNumber.value + 'px'; //  计算整个简历的高度
+            htmlContentPdf.value.style.height = html2Pdf.value.$el.style.height;
+        }
+    });
+    observer.observe(htmlContentPdf.value);
+};
 
 // 子组件内容发生变化时--->需要重新计算高度，触发resizeDOM
 const contentHeightChange = async (height: number) => {
@@ -133,13 +163,40 @@ const contentHeightChange = async (height: number) => {
 // 展开或收起属性面板
 const configRef = ref<any>(null);
 const unfoldOrCollapseConfig = (status: boolean) => {
-  if (status) {
-    configRef.value.style.width = '355px';
-    configRef.value.style.flex = 'inherit';
-  } else {
-    configRef.value.style.flex = 1;
-  }
+    if (status) {
+        configRef.value.style.width = '355px';
+        configRef.value.style.flex = 'inherit';
+    } else {
+        configRef.value.style.flex = 1;
+    }
 };
+
+// 生成要下载的PDF / PNG
+const dialogVisible = ref<boolean>(false);
+const precentage = ref<number>(10);// 导出的进度
+let timer: any = null;
+let generateType = ''
+const generateReport = async (type: string) => {
+    generateType = type;
+    dialogVisible.value = true;
+    timer = setInterval(() => {
+        precentage.value += 5;
+        if (precentage.value > 95) {
+            precentage.value = 98;
+            clearInterval(timer);
+        }
+    }, 500)
+    let token = localStorage.getItem('token') as string;
+    let height = htmlContentPdf.value.style.height;
+    if (type === 'pdf') {
+        await exportPdf(token, id as string, height);
+    } else {
+        await exportPNG(token, id as string, height);
+    }
+    clearInterval(timer);
+    precentage.value = 100;
+}
+
 onMounted(() => {
     closeGlobalLoading(); //  关闭全局等待层
 })

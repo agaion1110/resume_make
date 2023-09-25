@@ -36,6 +36,7 @@ const { resetResumeJson } = appStore.useResumeJsonNewStore;
 const toCustom = () => {
   resetResumeJson(); // 重置简历数据
   openGlobalLoading(); //  打开等待动画层
+  alert('1312313')
   router.push({
     path: '/custom'
   });
