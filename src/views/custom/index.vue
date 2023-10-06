@@ -1,6 +1,5 @@
 <template>
   <div class="custom-resume-box">
-    66666
     <!-- 导航栏 -->
     <NavCom @generate-report="generateReport"></NavCom>
     <!-- 主区域 -->

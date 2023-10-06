@@ -158,10 +158,11 @@ router.beforeEach((to, from, next) => {
   const userInfo = localStorage.getItem('userInfo');
   // 需要权限且已经登录
   if (to.meta.requireLogin && !token) {
+    console.log('关闭路由守卫');
     closeGlobalLoading(); // 关闭全局等待层
     LoginDialog(true, to.fullPath);
   } else if (to.meta.requireLogin && token) {
-    // 需要权限且已经登录
+    // 浏览器本地保存用户信息不需要再次登录
     if (userInfo) {
       const emailVerify = JSON.parse(userInfo as string).auth.email.valid;
       if (emailVerify) {

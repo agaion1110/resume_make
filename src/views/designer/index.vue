@@ -1,7 +1,8 @@
 <template>
     <div class="design-box">
         <!-- 导航栏 -->
-        <DesignNav></DesignNav>
+        <DesignNav ref="navRef" @generate-report="generateReport" @generate-report-new="generateReportNew" @reset="reset">
+        </DesignNav>
         <!-- 内容区 -->
         <div class="bottom">
             <!-- 左侧添加模块区 -->
@@ -35,6 +36,9 @@
                 </c-scrollbar>
             </div>
         </div>
+        <!-- 导出pdf进度弹窗 -->
+        <process-bar-dialog :dialog-visible="dialogVisible" :percentage-num="precentage"
+            @cancel="cancelProgress"></process-bar-dialog>
     </div>
 </template>
 
@@ -45,16 +49,15 @@ import DesignNav from './components/DesignNav.vue'
 import Title from './components/Title.vue'
 import ModelList from './components/ModelList.vue'
 import IDESIGNJSON from '@/interface/design';
-import { getResetTemplateInfoAsync, getTemplateInfoAsync } from '@/http/api/resume';
+import { addMakeResumeCountAsync, cancelDownload, getResetTemplateInfoAsync, getTemplateInfoAsync } from '@/http/api/resume';
 import resumeBackgroundComponents from '@/utils/registerResumeBackgroundCom';
 import custom from '@/template/custom/index.vue';
 import optionsComponents from '@/utils/registerMaterialOptionsCom';
 import GlobalStyleOptionsVue from '@/options/GlobalStyleOptions.vue';
 import TitleConfig from './components/TitleConfig.vue';
 import { closeGlobalLoading } from '@/utils/common';
-import { type } from 'os';
-import { values } from 'lodash';
 import { exportPNG, exportPdf } from '@/utils/pdf';
+import printHtml from '@/utils/print';
 // 简历的基本数据变量
 const route = useRoute();
 // 简历标题
@@ -101,7 +104,7 @@ const resetStoreAndLocal = async (isReset = false, ID = id) => {
     setUuid(); // 更新uuid
 }
 resetStoreAndLocal();
-
+provide('resetStoreAndLocal', resetStoreAndLocal);
 // 放大缩小center
 const sizeCenter = ref<number>(1);
 const addSize = (number: number) => {
@@ -175,7 +178,7 @@ const unfoldOrCollapseConfig = (status: boolean) => {
 const dialogVisible = ref<boolean>(false);
 const precentage = ref<number>(10);// 导出的进度
 let timer: any = null;
-let generateType = ''
+let generateType = '';
 const generateReport = async (type: string) => {
     generateType = type;
     dialogVisible.value = true;
@@ -196,6 +199,53 @@ const generateReport = async (type: string) => {
     clearInterval(timer);
     precentage.value = 100;
 }
+const isPrinting = ref<boolean>(false);
+const generateReportNew = async () => {
+    addMakeResumeCountAsync(); // 增加pdf导出次数
+    isPrinting.value = true; // 去掉分割线
+    // 重置store选中模块
+    resetSelectModel();
+    await nextTick();
+    const target = document.getElementById('print');
+    if (target) {
+        printHtml(target.innerHTML);
+    }
+    // 打印取消和完成
+    window.onbeforeprint = () => {
+        isPrinting.value = true;
+    };
+    window.onafterprint = () => {
+        isPrinting.value = false;
+    };
+};
+// 关闭进度弹窗
+const cancelProgress = () => {
+    // 取消导出
+    cancelDownload(generateType);
+    dialogVisible.value = false;
+    precentage.value = 10;
+};
+
+const { resetSelectModel } = appStore.useSelectMaterialStore;
+// 全局样式设置
+const globalStyleSetting = () => {
+    // 重置store中选中的模块
+    resetSelectModel();
+};
+// 重置数据
+const reset = async () => {
+    resetStoreAndLocal(true); //  重置store数据
+    globalStyleSetting(); //  重置选中模块
+    ElMessage({
+        message: '重置成功！',
+        type: 'success',
+        center: true
+    });
+    setUuid(); //  重新渲染左侧列表和右侧属性面板
+    await nextTick();
+    resizeDOM();
+};
+
 
 onMounted(() => {
     closeGlobalLoading(); //  关闭全局等待层
